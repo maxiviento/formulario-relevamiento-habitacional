@@ -7,10 +7,11 @@ import { ConfirmDialogComponent } from './dialog/confirm-dialog/confirm-dialog.c
 import jsPDF from 'jspdf';
 import { validateRequired } from './app.module';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.scss','./estilolarita.css'],
 })
 export class AppComponent {
   title: string;
@@ -544,22 +545,142 @@ export class AppComponent {
   fields: FormlyFieldConfig[];
 
   constructor(public db: AngularFireDatabase, public dialog: MatDialog) {
-    this.title = 'FORMULARIO de RELEVAMIENTO HABITACIONAL';
+    this.title = 'FORMULARIO  RELEVAMIENTO DE DATOS';
     this.form = new FormGroup({});
     this.model = {};
     this.fields = [
       {
         className: 'datos-identificacion',
-        template: '<div class="coltit"><h2 style="color:#53aae0;">Identificacion territorial:</h2></div>',
+        template: '<div class="coltit"><h2 style="color:#53aae0;">Registro General:</h2></div>',
       },
 
+      {
+        key: 'Beneficiarix',
+        type: 'repeat',
+        templateOptions: {
+          addText: 'Datos Personales',
+        },
+        fieldArray: {
+          fieldGroup: [
+            {
+              key: 'Apellidos',
+              type: 'input',
+              defaultValue: null,
+              templateOptions: {
+                required: true,
+                label: 'Apellidos',
+                placeholder: 'Ingrese un/os apellido/s'
+              }
+            },
+            {
+              key: 'Nombres',
+              type: 'input',
+              defaultValue: null,
+              templateOptions: {
+                required: true,
+                label: 'Nombres',
+                placeholder: 'Ingrese un/os nombre/s'
+              }
+            },
+            {
+              key: 'DNI',
+              type: 'input',
+              defaultValue: null,
+              templateOptions: {
+                required: true,
+                label: 'DNI',
+                placeholder: 'Ingrese su DNI',
+                pattern: '\\d{7,8}'
+              }
+            },
+            {
+              key: 'CUIL',
+              type: 'input',
+              defaultValue: null,
+              templateOptions: {
+                required: true,
+                label: 'CUIL',
+                placeholder: 'Ingrese su CUIL',
+                pattern: '\\d{7,8}'
+              }
+            },
+            {
+              key: 'Fecha de nacimiento',
+              type: 'input',
+              defaultValue: null,
+              templateOptions: {
+                type: 'date',
+                required: true,
+                label: 'Fecha de nacimiento',
+              }
+            },
+            {
+              key: 'Genero',
+              type: 'select',
+              defaultValue: null,
+              templateOptions: {
+                required: true,
+                label: 'Género',
+                options: [
+                  { value: 'Femenino', label: 'Femenino' },
+                  { value: 'Masculino', label: 'Masculino' },
+                  { value: 'No Binario', label: 'No Binario' },
+                  { value: 'Otro', label: 'Otro' },
+                ]
+              }
+            },
+            {
+              key: 'Nacionalidad',
+              type: 'select',
+              defaultValue: null,
+              templateOptions: {
+                label: 'Nacionalidad',
+                options: [
+                  { value: 'Argentina', label: 'Argentina' },
+                  { value: 'Brasil', label: 'Brasil' },
+                  { value: 'Bolivia', label: 'Bolivia' },
+                  { value: 'Chile', label: 'Chile' },
+                  { value: 'Paraguay', label: 'Paraguay' },
+                  { value: 'Perú', label: 'Perú' },
+                  { value: 'Uruguay', label: 'Uruguay' },
+                  { value: 'Otro país', label: 'Otro país' },
+                ]
+              }
+            },
+            {
+              key: 'Ocupación',
+              type: 'select',
+              defaultValue: null,
+              templateOptions: {
+                label: 'Ocupación',
+                options: [
+                  { value: 'Ama de casa', label: 'Ama de casa' },
+                  { value: 'Changarin', label: 'Changarin' },
+                  { value: 'Estudiante', label: 'Estudiante' },
+                  { value: 'Inactivo', label: 'Inactivo' },
+                  { value: 'Jubilado/Pensionado', label: 'Jubilado/Pensionado' },
+                  { value: 'Patrón o empleador', label: 'Patrón o empleador' },
+                  { value: 'Servicio doméstico', label: 'Servicio doméstico' },
+                  { value: 'Trabajo voluntario', label: 'Trabajo voluntario' },
+                  { value: 'Cuenta propia', label: 'Cuenta propia' },
+                  { value: 'Cuidado doméstico sin remuneración', label: 'Cuidado doméstico sin remuneración' },
+                  { value: 'Desocupado', label: 'Desocupado' },
+                  { value: 'Economía popular/asociativo', label: 'Economía popular/asociativo' },
+                  { value: 'Empleado de un sector privado', label: 'Empleado de un sector privado' },
+                ],
+                required: true,
+              },
+            },
+          ]
+        }
+      },
 
       // IDENTIFICACION TERRITORIAL
       {
-        key: 'Identificación territorial',
+        key: 'Ubicación',
         type: 'no repeat',
         templateOptions: {
-          addText: 'Ingresar datos de la identificación territorial',
+          addText: 'Domicilio',
         },
         fieldArray: {
           fieldGroup: [
@@ -1219,24 +1340,12 @@ export class AppComponent {
               }
             },
             {
-              template: 'Ubicación'
-            },
-            {
-              key: 'Manzana',
+              key: 'Barrio_no_oficial',
               type: 'input',
               defaultValue: null,
               templateOptions: {
-                label: 'Manzana',
-                placeholder: 'Igrese una manzana',
-              }
-            },
-            {
-              key: 'Lote',
-              type: 'input',
-              defaultValue: null,
-              templateOptions: {
-                label: 'Lote',
-                placeholder: 'Igrese un lote',
+                label: 'Barrio RENABAP o No registrado',
+                placeholder: 'Ingrese en caso de ser un barrio RENABAP o No Oficial',
               }
             },
             {
@@ -1245,7 +1354,25 @@ export class AppComponent {
               defaultValue: null,
               templateOptions: {
                 label: 'Domicilio',
-                placeholder: 'Igrese un domicilio',
+                placeholder: 'Ingrese calle y numeración correspondiente',
+              }
+            },
+            {
+              key: 'Manzana',
+              type: 'input',
+              defaultValue: null,
+              templateOptions: {
+                label: 'Manzana',
+                placeholder: 'Ingrese una manzana',
+              }
+            },
+            {
+              key: 'Lote',
+              type: 'input',
+              defaultValue: null,
+              templateOptions: {
+                label: 'Lote',
+                placeholder: 'Ingrese un lote',
               }
             },
             {
@@ -1260,665 +1387,198 @@ export class AppComponent {
           ]
         }
       },
-      //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
       {
-        className: 'datos-entrevista',
-        template: '<div class="coltit"><h2 style="color:#53aae0;">Entrevista:</h2></div>',
-      },
-
-      {
-        key: 'Entrevista',
+        key: 'Atención General',
         type: 'no repeat',
         templateOptions: {
-          addText: 'Ingresar datos de la entrevista',
+          addText: 'Atencion General',
         },
         fieldArray: {
           fieldGroup: [
             {
-              key: 'realiza_entrevista',
-              type: 'select',
-              defaultValue: 'Si',
-              templateOptions: {
-                label: 'Realiza la entrevista',
-                options: [
-                  { value: 'Si', label: 'Si' },
-                  { value: 'No', label: 'No' },
-                ]
-              }
-            },
-            {
-              key: 'Motivo',
-              type: 'select',
-              defaultValue: null,
-              templateOptions: {
-                label: 'Motivo',
-                required: true,
-                options: [
-                  { value: 'Ausente', label: 'Ausente' },
-                  { value: 'Rechazo', label: 'Rechazo' },
-                  { value: 'Vivienda vacía', label: 'Vivienda vacía' },
-                  { value: 'Lote o baldío', label: 'Lote o baldío' },
-                  { value: 'Vivienda en construcción', label: 'Vivienda en construcción' },
-                  { value: 'Local comercial', label: 'Local comercial' },
-                ]
-              },
-              expressionProperties: {
-                hide: 'model.realiza_entrevista == "Si"',
-                show: 'model.realiza_entrevista == "No"',
-              }
-            },
-            {
-              key: 'Observación',
+              key: 'Fecha',
               type: 'input',
               defaultValue: null,
               templateOptions: {
-                label: 'Observación',
-                placeholder: 'Igrese una observación',
-              },
-              expressionProperties: {
-                hide: 'model.realiza_entrevista == "Si"',
-                show: 'model.realiza_entrevista == "No"',
+                label: 'Fecha',
+                placeholder: 'Ingrese la fecha',
+                type: 'date'
               }
             },
             {
-              key: 'Nombre del entrevistador',
+              key: 'Turno actual / hora de intervención (brigada)',
               type: 'input',
               defaultValue: null,
               templateOptions: {
-                label: 'Nombre del entrevistador',
-                placeholder: 'Igrese un nombre',
-
-              },
-              expressionProperties: {
-                hide: 'model.realiza_entrevista == "Si"',
-                show: 'model.realiza_entrevista == "No"',
-                'templateOptions.required': 'model.realiza_entrevista == "No"'
+                label: 'Hora',
+                placeholder: 'Ingrese la hora en formato HH:MM',
+                type: 'time'
               }
             },
             {
-              key: 'Teléfono del entrevistador',
+              key: 'Hora Ingreso al Polo',
               type: 'input',
               defaultValue: null,
               templateOptions: {
-                label: 'Teléfono del entrevistador',
-                placeholder: 'Igrese un teléfono',
-                pattern: '\\d{7,25}'
-              },
-              expressionProperties: {
-                hide: 'model.realiza_entrevista == "Si"',
-                show: 'model.realiza_entrevista == "No"',
-                'templateOptions.required': 'model.realiza_entrevista == "No"'
-              }
-            },
-          ]
-        }
-      },
-      //------------------------------------------------------------------------------------------------------------------------
-      {
-        template: '<h2>Información del lote</h2>'
-      },
-      {
-        key: 'Lote',
-        type: 'no repeat',
-        templateOptions: {
-          addText: 'Ingresar lote',
-        },
-        fieldArray: {
-          fieldGroup: [
-            {
-              key: '¿Que otro uso le da a la vivienda ademas de la habitacional?',
-              type: 'select',
-              defaultValue: null,
-              templateOptions: {
-                label: '¿Que otro uso le da a la vivienda ademas de la habitacional?',
-                options: [
-                  { value: 'Comunitario', label: 'Comunitario' },
-                  { value: 'Comercial', label: 'Comercial' },
-                  { value: 'Otro', label: 'Otro' },
-                ]
+                label: 'Hora',
+                placeholder: 'Ingrese la hora en formato HH:MM',
+                type: 'time'
               }
             },
             {
-              template: '<h3>Situacion de los pozos absorventes</h3>'
-            },
-            {
-              key: '¿Cantidad total de pozos?',
+              key: 'Hora Egreso al Polo',
               type: 'input',
               defaultValue: null,
               templateOptions: {
-                label: '¿Cantidad total de pozos?',
-                placeholder: 'Ingrese una cantidad',
-                type: 'number'
+                label: 'Hora',
+                placeholder: 'Ingrese la hora en formato HH:MM',
+                type: 'time'
               }
             },
             {
-              key: '¿Cantidad de pozos saturados?',
+              key: 'Nombre de agente',
               type: 'input',
               defaultValue: null,
               templateOptions: {
-                label: '¿Cantidad de pozos saturados?',
-                placeholder: 'Ingrese una cantidad',
-                type: 'number'
+                label: 'Nombre agente',
+                placeholder: 'Ingrese el nombre de la agente que atiende el caso',
+                type: 'text'
               }
             },
             {
-              key: '¿Cantidad de pozos en uso?',
-              type: 'input',
-              defaultValue: null,
+              key: 'ADMISIÓN',
+              type: 'no repeat',
               templateOptions: {
-                label: '¿Cantidad de pozos en uso?',
-                placeholder: 'Ingrese una cantidad',
-                type: 'number'
-              }
-            },
-            {
-              key: 'se_inunda_actualmente',
-              type: 'select',
-              defaultValue: null,
-              templateOptions: {
-                label: '¿Se inuda actualmente?',
-                options: [
-                  { value: 'Si', label: 'Si' },
-                  { value: 'No', label: 'No' },
-                ]
-              }
-            },
-            {
-              key: 'Frecuencia',
-              type: 'input',
-              defaultValue: null,
-              templateOptions: {
-                label: 'Frecuencia',
-                placeholder: 'Ingrese una frecuencia en caso de ser Si',
-              },
-              expressionProperties: {
-                hide: 'model.se_inunda_actualmente == "No"',
-                show: 'model.se_inunda_actualmente == "Si"',
-              }
-            },
-            {
-              template: '<h3>Residuos domiciliarios</h3>'
-            },
-            {
-              key: '¿Posee cesto domiciliario?',
-              type: 'select',
-              defaultValue: null,
-              templateOptions: {
-                label: '¿Posee cesto domiciliario?',
-                options: [
-                  { value: 'Si', label: 'Si' },
-                  { value: 'No', label: 'No' },
-                ]
-              }
-            },
-            {
-              key: 'cuenta_con_servicio_de_recoleccion',
-              type: 'select',
-              defaultValue: null,
-              templateOptions: {
-                label: '¿Cuenta con servicio de recolección?',
-                options: [
-                  { value: 'Si', label: 'Si' },
-                  { value: 'No', label: 'No' },
-                ]
-              }
-            },
-            {
-              key: '¿Que tipo de servicio?',
-              type: 'input',
-              defaultValue: null,
-              templateOptions: {
-                label: '¿Que tipo de servicio?',
-                placeholder: 'Ingrese un tipo de servicio'
-              },
-              expressionProperties: {
-                hide: 'model.cuenta_con_servicio_de_recoleccion == "No"',
-                show: 'model.cuenta_con_servicio_de_recoleccion == "Si"',
-              }
-            },
-            {
-              template: '<h3>Transporte público</h3>'
-            },
-            {
-              key: '¿Que lineas pasan?',
-              type: 'select',
-              defaultValue: null,
-              templateOptions: {
-                label: '¿Que lineas pasan?',
-                multiple: true,
-                options: [
-                  { value: '10', label: '10' },
-                  { value: '11', label: '11' },
-                  { value: '12', label: '12' },
-                  { value: '13', label: '13' },
-                  { value: '14', label: '14' },
-                  { value: '15', label: '15' },
-                  { value: '16', label: '16' },
-                  { value: '17', label: '17' },
-                  { value: '18', label: '18' },
-                  { value: '19', label: '19' },
-                  { value: 'D10', label: 'D10' },
-                  { value: '20', label: '20' },
-                  { value: '21', label: '21' },
-                  { value: '22', label: '22' },
-                  { value: '23', label: '23' },
-                  { value: '24', label: '24' },
-                  { value: '25', label: '25' },
-                  { value: '26', label: '26' },
-                  { value: '27', label: '27' },
-                  { value: '28', label: '28' },
-                  { value: '29', label: '29' },
-                  { value: 'B20', label: 'B20' },
-                  { value: 'D20', label: 'D20' },
-                  { value: '30', label: '30' },
-                  { value: '31', label: '31' },
-                  { value: '32', label: '32' },
-                  { value: '33', label: '33' },
-                  { value: '34', label: '34' },
-                  { value: '35', label: '35' },
-                  { value: '36', label: '36' },
-                  { value: 'B30', label: 'B30' },
-                  { value: 'B31', label: 'B31' },
-                  { value: 'D30', label: 'D30' },
-                  { value: '40', label: '40' },
-                  { value: '41', label: '41' },
-                  { value: '42', label: '42' },
-                  { value: '43', label: '43' },
-                  { value: '44', label: '44' },
-                  { value: '45', label: '45' },
-                  { value: '50', label: '50' },
-                  { value: '51', label: '51' },
-                  { value: '52', label: '52' },
-                  { value: '53', label: '53' },
-                  { value: '54', label: '54' },
-                  { value: '55', label: '55' },
-                  { value: 'D50', label: 'D50' },
-                  { value: '60', label: '60' },
-                  { value: '61', label: '61' },
-                  { value: '62', label: '62' },
-                  { value: '63', label: '63' },
-                  { value: '64', label: '64' },
-                  { value: '65', label: '65' },
-                  { value: '66', label: '66' },
-                  { value: '67', label: '67' },
-                  { value: '68', label: '68' },
-                  { value: 'B60', label: 'B60' },
-                  { value: 'B61', label: 'B61' },
-                  { value: '70', label: '70' },
-                  { value: '71', label: '71' },
-                  { value: '72', label: '72' },
-                  { value: '73', label: '73' },
-                  { value: '74', label: '74' },
-                  { value: '75', label: '75' },
-                  { value: 'B70', label: 'B70' },
-                  { value: '80', label: '80' },
-                  { value: '81', label: '81' },
-                  { value: '82', label: '82' },
-                  { value: '83', label: '83' },
-                  { value: '84', label: '84' },
-                  { value: '85', label: '85' },
-                  { value: 'B80', label: 'B80' },
-                  { value: 'D80', label: 'D80' },
-                  { value: '500', label: '500' },
-                  { value: '501', label: '501' },
-                  { value: '600', label: '600' },
-                  { value: '601', label: '601' },
-                ]
-              }
-            },
-            {
-              key: '¿A cuantas cuadras está la parada más proxima?',
-              type: 'input',
-              defaultValue: null,
-              templateOptions: {
-                label: '¿A cuantas cuadras está la parada más proxima?',
-                placeholder: 'Ingrese una cantidad',
-                type: 'number'
-              }
-            },
-            {
-              key: '¿Cuántas viviendas hay en el lote?',
-              type: 'input',
-              defaultValue: null,
-              templateOptions: {
-                type: 'number',
-                label: '¿Cuántas viviendas hay en el lote?',
-                placeholder: 'Igrese una cantidad',
-                required: true,
-              }
-            },
-            {
-              key: 'Viviendas',
-              type: 'repeat',
-              templateOptions: {
-                addText: 'Agregar vivienda',
+                addText: 'ADMISIÓN',
               },
               fieldArray: {
                 fieldGroup: [
                   {
-                    template: '<h2>Indagación de viviendas y grupos familiares</h2>'
-                  },
-                  {
-                    key: 'numero_vivienda',
+                    key: 'N° Ficha',
                     type: 'input',
                     defaultValue: null,
                     templateOptions: {
-                      label: 'Numero de vivienda',
-                      placeholder: 'Ingrese el número que identifique la vivienda',
-                      type: 'number',
-                      required: true
+                      label: 'N° Ficha',
+                      placeholder: 'Ingrese el número de ficha',
+                      type: 'number'
                     }
                   },
                   {
-                    key: 'tipo_propietario',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Tipo de propietario',
-                      options: [
-                        { value: 'Propietario de vivienda y terreno', label: 'Propietario de vivienda y terreno' },
-                        { value: 'Propietario de solo vivienda', label: 'Propietario de solo vivienda' },
-                        { value: 'Ninguno', label: 'Ninguno' },
-                        { value: 'Ocupante por préstamo', label: 'Ocupante por préstamo' },
-                        { value: 'Poseedor', label: 'Poseedor' },
-                        { value: 'Otro', label: 'Otro' },
-                      ],
-                      required: true
-                    }
-                  },
-                  {
-                    key: 'Documento a presentar poseedor de titulo de dueño',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Documento a presentar poseedor de titulo de dueño',
-                      options: [
-                        { value: 'Escritura', label: 'Escritura' },
-                        { value: 'Boleto compra-venta', label: 'Boleto compra-venta' },
-                        { value: 'Sentencia firme de juicio usucapión', label: 'Sentencia firme de juicio usucapión' },
-                        { value: 'Auto declaración de herederos', label: 'Auto declaración de herederos' },
-                        { value: 'Declaración jurada de herederos con acreditación de vinculo', label: 'Declaración jurada de herederos con acreditación de vinculo' },
-                        { value: 'Resolución de inscripción en registro de poseedor LEY 9150', label: 'Resolución de inscripción en registro de poseedor LEY 9150' },
-                        { value: 'Nada', label: 'Nada' },
-                      ],
-                    },
-                  },
-                  {
-                    key: 'Ocupante por préstamo',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Ocupante por préstamo',
-                      options: [
-                        { value: 'De un familiar', label: 'De un familiar' },
-                        { value: 'Por pago de impuestos/expensas', label: 'Por pago de impuestos/expensas' },
-                        { value: 'Ocupante gratuito (sin permiso)', label: 'Ocupante gratuito (sin permiso)' },
-                        { value: 'Ocupante de hecho (con permiso)', label: 'Ocupante de hecho (con permiso)' },
-                        { value: 'En un relación de depandencia', label: 'En un relación de depandencia' },
-                        { value: 'Otra situación', label: 'Otra situación' },
-                      ],
-                    },
-                    expressionProperties: {
-                      show: 'model.tipo_propietario == "Ocupante por préstamo"',
-                      hide: 'model.tipo_propietario == "Propietario de vivienda y terreno" || model.tipo_propietario == "Propietario de solo vivienda" || model.tipo_propietario == "Ninguno"  || model.tipo_propietario == "Otro" '
-                    }
-                  },
-                  {
-                    key: '¿Cuantas habitaciones tienen para dormir?  (sin baño, ni cocina)',
+                    key: 'Derivación',
                     type: 'input',
                     defaultValue: null,
                     templateOptions: {
-                      type: 'number',
-                      label: '¿Cuantas habitaciones tienen para dormir?  (sin baño, ni cocina)',
-                      placeholder: 'Igrese una cantidad',
-                      required: true,
+                      label: 'Derivacion',
+                      placeholder: '¿Desde dónde se derivó?',
+                      type: 'string'
                     }
                   },
+                ]
+              }
+            },
+            {
+              key: 'ASISTENCIA',
+              type: 'no repeat',
+              templateOptions: {
+                addText: 'ASISTENCIA',
+              },
+              fieldArray: {
+                fieldGroup: [
                   {
-                    key: 'Posee sistema estructural',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Posee sistema estructural',
-                      options: [
-                        { value: 'Completo (base, columna y /o encadenado, cubierta superior)', label: 'Completo (base, columna y /o encadenado, cubierta superior)' },
-                        { value: 'Incompleto', label: 'Incompleto' },
-                        { value: 'No tiene', label: 'No tiene' },
-                      ]
-                    }
-                  },
-                  {
-                    key: 'Tipo de muros',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Tipo de muros',
-                      options: [
-                        { value: 'Ladrillo (comun, hormigon, ceramico)', label: 'Ladrillo (comun, hormigon, ceramico)' },
-                        { value: 'Madera', label: 'Madera' },
-                        { value: 'Carton, chapa y/o desechos', label: 'Carton, chapa y/o desechos' },
-                      ]
-                    }
-                  },
-                  {
-                    key: 'Tipo de piso',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Tipo de piso',
-                      options: [
-                        { value: 'Tierra', label: 'Tierra' },
-                        { value: 'Cemento', label: 'Cemento' },
-                        { value: 'Baldosa/Cerámico/Mosaico', label: 'Baldosa/Cerámico/Mosaico' },
-                      ]
-                    }
-                  },
-                  {
-                    key: 'Tipo de cubierta',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Tipo de cubierta',
-                      options: [
-                        { value: 'Losa', label: 'Losa' },
-                        { value: 'Madera/chapa', label: 'Madera/chapa' },
-                        { value: 'Desechos', label: 'Desechos' },
-                      ]
-                    }
-                  },
-                  {
-                    template: '<h3>Baño</h3>'
-                  },
-                  {
-                    key: 'posee_baño',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: '¿Posee baño?',
-                      options: [
-                        { value: 'Si', label: 'Si' },
-                        { value: 'No', label: 'No' },
-                      ]
-                    }
-                  },
-                  {
-                    key: '¿Cuantos? (baños)',
+                    key: 'N° Ficha',
                     type: 'input',
                     defaultValue: null,
                     templateOptions: {
-                      type: 'number',
-                      label: '¿Cuantos?',
-                      placeholder: 'Igrese una cantidad'
-                    },
-                    expressionProperties: {
-                      hide: 'model.posee_baño == "No"',
-                      show: 'model.posee_baño == "Si"',
+                      label: 'N° Ficha',
+                      placeholder: 'Ingrese el número de ficha',
+                      type: 'number'
                     }
                   },
                   {
-                    key: 'Tipo de baño',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Tipo de baño',
-                      options: [
-                        { value: 'Baño instalado', label: 'Baño instalado' },
-                        { value: 'Baño incompleto', label: 'Baño incompleto' }
-                      ]
-                    },
-                    expressionProperties: {
-                      hide: 'model.posee_baño == "No"',
-                      show: 'model.posee_baño == "Si"',
-                    }
-                  },
-                  {
-                    key: 'Tratamiento de excretas',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Tratamiento de excretas',
-                      options: [
-                        { value: 'A camara de inspeccion', label: 'A camara de inspeccion' },
-                        { value: 'A camara septica y pozo', label: 'A camara septica y pozo' },
-                        { value: 'Solo a pozo', label: 'Solo a pozo' },
-                        { value: 'Hollo, excabación en tierra, etc.', label: 'Hollo, excabación en tierra, etc.' },
-                        { value: 'Otros', label: 'Otros' },
-                      ]
-                    }
-                  },
-                  {
-                    template: '<h3>Agua</h3>'
-                  },
-                  {
-                    key: 'Provisión de agua',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Provisión de agua',
-                      options: [
-                        { value: 'Red formal', label: 'Red formal' },
-                        { value: 'Red informal', label: 'Red informal' }
-                      ]
-                    }
-                  },
-                  {
-                    key: '¿El acceso al agua es?',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: '¿El acceso al agua es?',
-                      options: [
-                        { value: 'Por cañería dentro de la vivienda', label: 'Por cañería dentro de la vivienda' },
-                        { value: 'Por fuera de la vivienda pero dentro del terreno', label: 'Por fuera de la vivienda pero dentro del terreno' },
-                        { value: 'Por fuera del terreno', label: 'Por fuera del terreno' },
-                      ]
-                    }
-                  },
-                  {
-                    key: '¿Posee tanque de agua?',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: '¿Posee tanque de agua?',
-                      options: [
-                        { value: 'Si', label: 'Si' },
-                        { value: 'No', label: 'No' },
-                      ]
-                    }
-                  },
-                  {
-                    template: '<h3>Luz</h3>'
-                  },
-                  {
-                    key: '¿Posee electricidad con medidor?',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: '¿Posee electricidad con medidor?',
-                      options: [
-                        { value: 'Si', label: 'Si' },
-                        { value: 'No', label: 'No' },
-                      ]
-                    }
-                  },
-                  {
-                    key: '¿Posee Tarifa Social?',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: '¿Posee Tarifa Social?',
-                      options: [
-                        { value: 'Si', label: 'Si' },
-                        { value: 'No', label: 'No' },
-                      ]
-                    }
-                  },
-                  {
-                    key: 'Uso de la energía',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Uso de la energía',
-                      options: [
-                        { value: 'Exclusivo de la vivienda', label: 'Exclusivo de la vivienda' },
-                        { value: 'Compartido', label: 'Compartido' },
-                      ]
-                    }
-                  },
-                  {
-                    template: '<h3>Gas</h3>'
-                  },
-                  {
-                    key: 'Tipo de gas',
-                    type: 'select',
-                    defaultValue: null,
-                    templateOptions: {
-                      label: 'Tipo de gas',
-                      options: [
-                        { value: 'Gas natural', label: 'Gas natural' },
-                        { value: 'Gas envasado', label: 'Gas envasado' },
-                        { value: 'Ninguno', label: 'Ninguno' },
-                      ]
-                    }
-                  },
-                  {
-                    template: '<h2>Hogares</h2>'
-                  },
-                  {
-                    key: 'Cantidad de hogares',
+                    key: 'Tipo de Atención',
                     type: 'input',
                     defaultValue: null,
                     templateOptions: {
-                      label: 'Cantidad de hogares',
-                      placeholder: 'Ingrese la cantidad de hogares en la vivienda',
-                      type: 'number',
-                      required: true
+                      label: 'Tipo de atención',
+                      type: 'string'
                     }
                   },
                   {
-                    key: 'Hogares',
+                    key: 'Valoración de riesgo',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Valoración de riesgo',
+                      type: 'string'
+                    }
+                  },
+                  {
+                    key: 'Derivaciones',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Derivaciones',
+                      type: 'string'
+                    }
+                  },
+                  {
+                    key: 'Derivación APROSS',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Derivación APROSS',
+                      type: 'string'
+                    }
+                  },
+                  {
+                    key: 'Módulo recomendado',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Módulo recomendado',
+                      type: 'string'
+                    }
+                  },
+                  {
+                    key: 'N° APROSS',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'N° APROSS',
+                      type: 'number'
+                    }
+                  },
+                  {
+                    key: 'Módulos completos',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Módulos completos',
+                      type: 'text'
+                    }
+                  },
+                  {
+                    key: 'Hijos/as',
+                    type: 'repeat',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Hijos/as',
+                      type: 'text'
+                    }
+                  },
+                  {
+                    key: 'Hijos',
                     type: 'repeat',
                     templateOptions: {
-                      addText: 'Agregar hogar',
+                      addText: 'Agregar hijos',
                     },
                     fieldArray: {
                       fieldGroup: [
                         {
-                          key: 'numero_hogar',
-                          type: 'input',
-                          defaultValue: null,
-                          templateOptions: {
-                            label: 'Numero de hogar',
-                            placeholder: 'Ingrese un numero de hogar',
-                            type: 'number',
-                            required: true
-                          }
-                        },
-                        {
-                          key: 'Ocupantes',
+                          key: 'Agregar_hijo',
                           type: 'repeat',
                           templateOptions: {
-                            addText: 'Agregar ocupante',
+                            addText: 'Agregar datos x hijos',
                           },
                           fieldArray: {
                             fieldGroup: [
@@ -1943,6 +1603,16 @@ export class AppComponent {
                                 }
                               },
                               {
+                                key: 'Fecha de nacimiento',
+                                type: 'input',
+                                defaultValue: null,
+                                templateOptions: {
+                                  type: 'date',
+                                  required: true,
+                                  label: 'Fecha de nacimiento',
+                                }
+                              },
+                              {
                                 key: 'DNI',
                                 type: 'input',
                                 defaultValue: null,
@@ -1954,278 +1624,70 @@ export class AppComponent {
                                 }
                               },
                               {
-                                key: 'Fecha de nacimiento',
+                                key: 'CUIL',
                                 type: 'input',
                                 defaultValue: null,
                                 templateOptions: {
-                                  type: 'date',
                                   required: true,
-                                  label: 'Fecha de nacimiento',
+                                  label: 'CUIL',
+                                  placeholder: 'Ingrese un DNI',
+                                  pattern: '\\d{7,8}'
                                 }
                               },
                               {
-                                key: 'Genero',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  required: true,
-                                  label: 'Género',
-                                  options: [
-                                    { value: 'Femenino', label: 'Femenino' },
-                                    { value: 'Masculino', label: 'Masculino' },
-                                    { value: 'Otro', label: 'Otro' },
-                                  ]
-                                }
-                              },
-                              {
-                                key: '¿Está embarazada?',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions:{
-                                  label: '¿Está embarazada?',
-                                  options:[
-                                    { value: 'No', label: 'No' },
-                                    { value: 'Si', label: 'Si' },
-                                  ]
-                                },
-                                expressionProperties:{
-                                  hide: 'model.Genero != "Femenino"',
-                                  show: 'model.Genero == "Femenino"'
-                                }
-                              },
-                              {
-                                key: 'Nacionalidad',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: 'Nacionalidad',
-                                  options: [
-                                    { value: 'Argentina', label: 'Argentina' },
-                                    { value: 'Brasil', label: 'Brasil' },
-                                    { value: 'Bolivia', label: 'Bolivia' },
-                                    { value: 'Chile', label: 'Chile' },
-                                    { value: 'Paraguay', label: 'Paraguay' },
-                                    { value: 'Perú', label: 'Perú' },
-                                    { value: 'Uruguay', label: 'Uruguay' },
-                                    { value: 'Otro país', label: 'Otro país' },
-                                  ]
-                                }
-                              },
-                              {
-                                key: 'Estado Civil',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: 'Estado Civil',
-                                  options: [
-                                    { value: 'Soltero/a', label: 'Soltero/a' },
-                                    { value: 'Casado/a', label: 'Casado/a' },
-                                    { value: 'Concubino/a', label: 'Concubino/a' },
-                                    { value: 'Divorciado/a', label: 'Divorciado/a' },
-                                    { value: 'Separado/a de hecho', label: 'Separado/a de hecho' },
-                                    { value: 'Viudo/a', label: 'Viudo/a' },
-                                    { value: 'Otro', label: 'Otro' },
-                                  ]
-                                }
-                              },
-                              {
-                                template: '<h3>Salud</h3>'
-                              },
-                              {
-                                key: 'posee_enfermedad_cronica',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: '¿Posee alguna enfermedad crónica?',
-                                  options: [
-                                    { value: 'Si', label: 'Si' },
-                                    { value: 'No', label: 'No' },
-                                  ]
-                                }
-                              },
-                              {
-                                key: '¿Cuál? (enfermedad crónica)',
+                                key: 'Domicilio',
                                 type: 'input',
                                 defaultValue: null,
                                 templateOptions: {
-                                  label: '¿Cuál?',
-                                  placeholder: 'Ingrese un tipo'
-                                },
-                                expressionProperties: {
-                                  hide: 'model.posee_enfermedad_cronica == "No"',
-                                  show: 'model.posee_enfermedad_cronica == "Si"',
-                                  'templateOptions.required': 'model.posee_enfermedad_cronica == "Si"',
+                                  label: 'Domicilio',
+                                  placeholder: 'Ingrese calle y numeración correspondiente',
                                 }
                               },
                               {
-                                key: 'posee_discapacidad',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: '¿Posee alguna discapacidad?',
-                                  options: [
-                                    { value: 'Si', label: 'Si' },
-                                    { value: 'No', label: 'No' },
-                                  ]
-                                }
-                              },
-                              {
-                                key: '¿Cuál? (discapacidad)',
+                                key: 'Módulo recomendado',
                                 type: 'input',
                                 defaultValue: null,
                                 templateOptions: {
-                                  label: '¿Cuál?',
-                                  placeholder: 'Ingrese un tipo'
-                                },
-                                expressionProperties: {
-                                  hide: 'model.posee_discapacidad == "No"',
-                                  show: 'model.posee_discapacidad == "Si"',
-                                  'templateOptions.required': 'model.posee_discapacidad == "Si"',
+                                  label: 'Módulo recomendado',
+                                  type: 'string'
                                 }
                               },
                               {
-                                key: 'cobra_beneficio_social',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: '¿Cobra un beneficio social?',
-                                  options: [
-                                    { value: 'Si', label: 'Si' },
-                                    { value: 'No', label: 'No' },
-                                  ]
-                                }
-                              },
-                              {
-                                key: '¿Cuál? (beneficio)',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: '¿Cuál?',
-                                  multiple: true,
-                                  options: [
-                                    { value: 'AUH', label: 'AUH' },
-                                    { value: 'Beneficiario Programa empleo (XMI;PPP, PILA, PIL)', label: 'Beneficiario Programa empleo (XMI;PPP, PILA, PIL)' },
-                                    { value: 'IFE', label: 'IFE' },
-                                    { value: 'Jubilación/Pensión', label: 'Jubilación/Pensión' },
-                                    { value: 'Pensión Adulto Mayor (PUAM)', label: 'Pensión Adulto Mayor (PUAM)' },
-                                    { value: 'Pension Madre de 7 hijos', label: 'Pension Madre de 7 hijos' },
-                                    { value: 'Pensión por Discapacidad', label: 'Pensión por Discapacidad' },
-                                    { value: 'Seguro de Desempleo', label: 'Seguro de Desempleo' },
-                                    { value: 'Tarejeta Social', label: 'Tarejeta Social' },
-                                    { value: 'Tarjeta Alimentar', label: 'Tarjeta Alimentar' },
-                                    { value: 'Ninguno', label: 'Ninguno' },
-                                    { value: 'Otro', label: 'Otro' },
-                                  ],
-                                },
-                                expressionProperties: {
-                                  hide: 'model.cobra_beneficio_social == "No"',
-                                  show: 'model.cobra_beneficio_social == "Si"',
-                                  'templateOptions.required': 'model.cobra_beneficio_social == "Si"',
-
-                                }
-                              },
-                              {
-                                template: '<h3>Educación</h3>'
-                              },
-                              {
-                                key: 'Nivel educativo alcanzado',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: 'Nivel educativo alcanzado',
-                                  options: [
-                                    { value: 'Jardin incompleto', label: 'Jardin incompleto' },
-                                    { value: 'Jardin completo', label: 'Jardin completo' },
-                                    { value: 'Primario incompleto', label: 'Primario incompleto' },
-                                    { value: 'Primario completo', label: 'Primario completo' },
-                                    { value: 'Secundario incompleto', label: 'Secundario incompleto' },
-                                    { value: 'Secundario completo', label: 'Secundario completo' },
-                                    { value: 'Terciario incompleto', label: 'Terciario incompleto' },
-                                    { value: 'Terciario completo', label: 'Terciario completo' },
-                                    { value: 'Universitario incompleto', label: 'Universitario incompleto' },
-                                    { value: 'Universitario completo', label: 'Universitario completo' },
-                                  ],
-                                  required: true,
-                                },
-                              },
-                              {
-                                key: '¿Asiste a algun establecimiento educativo?',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: '¿Asiste a algun establecimiento educativo?',
-                                  options: [
-                                    { value: 'Si', label: 'Si' },
-                                    { value: 'No', label: 'No' },
-                                  ]
-                                }
-                              },
-                              {
-                                key: '¿Tiene acceso a internet para la educacion vitual?',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: '¿Tiene acceso a internet para la educacion vitual?',
-                                  options: [
-                                    { value: 'Si', label: 'Si' },
-                                    { value: 'No', label: 'No' },
-                                  ]
-                                }
-                              },
-                              {
-                                key: 'Ocupación',
-                                type: 'select',
-                                defaultValue: null,
-                                templateOptions: {
-                                  label: 'Ocupación',
-                                  options: [
-                                    { value: 'Ama de casa', label: 'Ama de casa' },
-                                    { value: 'Changarin', label: 'Changarin' },
-                                    { value: 'Estudiante', label: 'Estudiante' },
-                                    { value: 'Inactivo', label: 'Inactivo' },
-                                    { value: 'Jubilado/Pensionado', label: 'Jubilado/Pensionado' },
-                                    { value: 'Patrón o empleador', label: 'Patrón o empleador' },
-                                    { value: 'Servicio doméstico', label: 'Servicio doméstico' },
-                                    { value: 'Trabajo voluntario', label: 'Trabajo voluntario' },
-                                    { value: 'Cuenta propia', label: 'Cuenta propia' },
-                                    { value: 'Cuidado doméstico sin remuneración', label: 'Cuidado doméstico sin remuneración' },
-                                    { value: 'Desocupado', label: 'Desocupado' },
-                                    { value: 'Economía popular/asociativo', label: 'Economía popular/asociativo' },
-                                    { value: 'Empleado de un sector privado', label: 'Empleado de un sector privado' },
-                                  ],
-                                  required: true,
-                                },
-                              },
-                              {
-                                key: 'Ingreso',
+                                key: 'N° APROSS',
                                 type: 'input',
                                 defaultValue: null,
                                 templateOptions: {
-                                  label: 'Ingreso',
-                                  placeholder: 'Ingrese un ingreso',
-                                  pattern: '\\d{1,25}'
+                                  label: 'N° APROSS',
+                                  type: 'number'
                                 }
                               },
                               {
-                                key: 'Vínculo con el solicitante',
-                                type: 'select',
+                                key: 'Módulos completos',
+                                type: 'input',
                                 defaultValue: null,
                                 templateOptions: {
-                                  required: true,
-                                  label: 'Vínculo con el solicitante',
-                                  options: [
-                                    { value: '1.	Jefe/a del Hogar', label: '1.	Jefe/a del Hogar' },
-                                    { value: '2.	Cónyuge/pareja', label: '2.	Cónyuge/pareja' },
-                                    { value: '3.	Hijo/a', label: '3.	Hijo/a' },
-                                    { value: '4.	Yerno/nuera', label: '4.	Yerno/nuera' },
-                                    { value: '5.	Nieto/a', label: '5.	Nieto/a' },
-                                    { value: '6.	Padre/madre', label: '6.	Padre/madre' },
-                                    { value: '7.	Suegro/a', label: '7.	Suegro/a' },
-                                    { value: '8.	Otros familiares', label: '8.	Otros familiares' },
-                                    { value: '9.	Otros no Familiares', label: '9.	Otros no Familiares' },
-                                  ]
+                                  label: 'Módulos completos',
+                                  type: 'text'
                                 }
                               },
+                              {
+                                key: 'Observaciones',
+                                type: 'input',
+                                defaultValue: null,
+                                templateOptions: {
+                                  label: 'Observaciones',
+                                  type: 'text'
+                                }
+                              },
+                              {
+                                key: 'Mes',
+                                type: 'input',
+                                defaultValue: null,
+                                templateOptions: {
+                                  label: 'Mes',
+                                  type: 'number'
+                                }
+                              },                           
                             ]
                           }
                         }
@@ -2234,12 +1696,208 @@ export class AppComponent {
                   }
                 ]
               }
-            }
+            },
+            {
+              key: 'BRIGADA',
+              type: 'no repeat',
+              templateOptions: {
+                addText: 'BRIGADA',
+              },
+              fieldArray: {
+                fieldGroup: [
+                  {
+                    key: 'N° Ficha',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'N° Ficha',
+                      placeholder: 'Ingrese el número de ficha',
+                      type: 'number'
+                    }
+                  },
+                  {
+                    key: 'N° Ficha BPM',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'N° Ficha BPM',
+                      placeholder: 'Ingrese el número de ficha',
+                      type: 'number'
+                    }
+                  },
+                  {
+                    key: 'N° de niños/as',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Numero de niños/as',
+                      placeholder: 'Ingrese el número de niños/as',
+                      type: 'number'
+                    }
+                  },
+                  {
+                    key: 'Nombre_apellido_agresor',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Nombre y Apellido del agresor',
+                      placeholder: 'Nombre y apellido del agresor',
+                      type: 'text'
+                    }
+                  },
+                  {
+                    key: 'Vínculo con el agresor',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Vínculo con el agresor',
+                      placeholder: 'Vínculo con el agresor',
+                      type: 'text'
+                    }
+                  },
+                  {
+                    key: 'Edad del agresor',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Edad del agresor',
+                      placeholder: 'Edad del agresor',
+                      type: 'number'
+                    }
+                  },
+                  {
+                    key: 'Ocupacion agresor',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Ocupacion agresor',
+                      placeholder: 'Ocupacion agresor',
+                      type: 'text'
+                    }
+                  },
+                  {
+                    key: 'Tipo de intervencion',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Tipo de intervencion',
+                      placeholder: 'Tipo de intervencion',
+                      type: 'text'
+                    }
+                  },
+                  {
+                    key: 'Motivo de intervencion',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Motivo de intervencion',
+                      placeholder: 'Motivo de intervencion',
+                      type: 'text'
+                    }
+                  },
+                  {
+                    key: 'Descripción del abordaje',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Descripción del abordaje',
+                      placeholder: 'Descripción del abordaje',
+                      type: 'text'
+                    }
+                  },
+                  {
+                    template: '<h5><b>Tipo de Derivación<b></h5>'
+                  },
+                  {
+                    key: 'tipoderivacion',
+                    type: 'select',
+                    templateOptions: {
+                      label: 'Select Options',
+                      multiple: true,
+                      options: [
+                        { value: 'A UJ UF', label: 'A UJ UF' },
+                        { value: 'A UJ DIS', label: 'A UJ DIS' },
+                        { value: 'A Equipo Primer Entrevista', label: 'A Equipo Primer Entrevista' },
+                        { value: 'A Equipo de ASISTENCIA', label: 'A Equipo de ASISTENCIA' },
+                        { value: 'A Refugio/hotel', label: 'A Refugio/hotel' },
+                        { value: 'A Equipo trata', label: 'A Equipo trata' },
+                        { value: 'A CIMI', label: 'A CIMI' },
+                        { value: 'A BAP/DUAL', label: 'A BAP/DUAL' },
+                        { value: 'A Alto Riesgo', label: 'A Alto Riesgo' },
+                      ]
+                    }
+                  },
+                  {
+                    template: '<h5><b>Recursos Entregados<b></h5>'
+                  },
+                  {
+                    key: 'recursos',
+                    type: 'select',
+                    templateOptions: {
+                      label: 'Select Options',
+                      multiple: true,
+                      options: [
+                        { value: 'Pañales', label: 'Pañales' },
+                        { value: 'Dinero', label: 'Dinero' },
+                        { value: 'Cerrajero', label: 'Cerrajero' },
+                        { value: 'Transporte', label: 'Transporte' },
+                        { value: 'Remedios', label: 'Remedios' },
+                        { value: 'Serv. de Emergencia', label: 'Serv. de Emergencia' },
+                        { value: 'Vianda', label: 'Vianda' },
+                        { value: 'Ropa', label: 'Ropa' },
+                      ]
+                    }
+                  },
+                  {
+                    key: 'Valoracion de riesgo',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'valoracion de riesgo',
+                      placeholder: 'valoracion de riesgo',
+                      type: 'number'
+                    }
+                  },
+                  {
+                    key: 'Estado',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Estado',
+                      placeholder: 'Estado',
+                      type: 'text'
+                    }
+                  },
+                  {
+                    key: 'Mes',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Mes',
+                      placeholder: 'Mes',
+                      type: 'number'
+                    }
+                  },
+                  {
+                    key: 'Año',
+                    type: 'input',
+                    defaultValue: null,
+                    templateOptions: {
+                      label: 'Año',
+                      placeholder: 'Año',
+                      type: 'number'
+                    }
+                  },                    
+                ]
+              }
+            },  
           ]
         }
-      },
+      }      
     ];
   }
+
+  
   createPdfAndSaveInFirebase() {
     if (this.form.invalid) {
       console.log(this.form.controls)
@@ -2268,7 +1926,7 @@ export class AppComponent {
         }
       }
       alert(txt_alert)
-    } 
+    }
     else {
       const newForm = JSON.parse(JSON.stringify(this.model).replace(/\//g, "-"));
       var newPostRef = this.db.list('formulariosEmpleo').push(newForm);
@@ -2276,7 +1934,7 @@ export class AppComponent {
       this.openDialog(postId);
     }
   }
-  
+
   openDialog(postId: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, { data: 'Formulario guardado exitosamente. Código: ' + postId });
     dialogRef.afterClosed().subscribe(res => {
